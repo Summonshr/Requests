@@ -3,7 +3,7 @@
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/summonshr/requests.svg?style=flat-square)](https://packagist.org/packages/summonshr/requests)
 [![Total Downloads](https://img.shields.io/packagist/dt/summonshr/requests.svg?style=flat-square)](https://packagist.org/packages/summonshr/requests)
 
-This is where your description should go. Try and limit it to a paragraph or two, and maybe throw in a mention of what PSRs you support to avoid any confusion with users and contributors.
+Laravel application tends to have too much controllers which does not do much.
 
 ## Installation
 
@@ -16,9 +16,59 @@ composer require summonshr/requests
 ## Usage
 
 ```php
-// Usage description here
+<?php
+
+namespace App\Http\Requests;
+
+use Illuminate\Foundation\Http\FormRequest;
+
+class CreateApplication extends FormRequest
+{
+    // To call on specific method
+    const REQUEST_METHOD = 'GET';
+
+    // To call on specific action
+    const ACTION = 'create_application';
+
+    /**
+     * Determine if the user is authorized to make this request.
+     */
+    public function authorize(): bool
+    {
+        return true;
+    }
+
+    /**
+     * Get the validation rules that apply to the request.
+     *
+     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array|string>
+     */
+    public function rules(): array
+    {
+        return [
+            //
+        ];
+    }
+
+    public function process()
+    {
+        // Process your requests here
+    }
+}
 ```
 
+When making request, send a parameter 'action' in each request on universal route.
+
+```json
+{
+    "action": "create_application",
+    // Rest of the parameters
+}
+```
+
+In case of GET Request, send it to query param 'action'.
+
+The application will automatically call the Request specified as per in Requests directory.
 ### Testing
 
 ```bash
