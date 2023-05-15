@@ -63,14 +63,7 @@ class RequestsServiceProvider extends ServiceProvider
 
         $action = str($class->getShortName())->kebab();
         $method = str($class->getShortName())->kebab()->explode('-')->first();
-
-        $method = match ($method) {
-            'store' => 'POST',
-            'create' => 'POST',
-            'edit' => 'PUT',
-            default => $method
-        };
-
+        $method = config('requests.default_method')($method);
 
         if ($class->getConstant('REQUEST_METHOD')) {
             $method = $class->getConstant('REQUEST_METHOD');
@@ -105,7 +98,11 @@ class RequestsServiceProvider extends ServiceProvider
             return app($request);
         });
 
-        Route::any('/' . config('requests.route_name'), UniversalController::class);
+        if (config('requests.route_name')) {
+            Route::any('/' . config('requests.route_name'), function (UniversalRequestInterface $request) {
+                return $request->process();
+            });
+        }
 
         $this->registerRoutes();
 
