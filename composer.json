@@ -49,5 +49,6 @@
                 "Summonshr\\Requests\\RequestsServiceProvider"
             ]
         }
-    }
+    },
+    "version": "0.0.1"
 }
