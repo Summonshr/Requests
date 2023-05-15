@@ -1,6 +1,8 @@
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/summonshr/requests.svg?style=flat-square)](https://packagist.org/packages/summonshr/requests)
 [![Total Downloads](https://img.shields.io/packagist/dt/summonshr/requests.svg?style=flat-square)](https://packagist.org/packages/summonshr/requests)
 
+This package is a bit inspired by https://github.com/spatie/laravel-route-attributes and some codes are even copied.
+
 # Why this package
 
 Laravel application tends to have too much controllers which does not do much. Same all five request, index, create, show, edit and destroy. For each controller, we would have five functions, five requests to validate those requests too. This seems redundant. For anything to add, I would have to add atleast one route, one controller and one request.
