@@ -91,6 +91,8 @@ Action is resolved as kebab case of the request class names if not specified in 
 
 For example, CreateUserRequest would have action 'create-user-request' as action by default.
 
+I will be building around this a lot.
+
 The application will automatically call the Request specified as per in Requests directory.
 ### Testing
 
