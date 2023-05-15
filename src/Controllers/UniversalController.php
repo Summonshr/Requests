@@ -2,11 +2,11 @@
 
 namespace Summonshr\Requests\Controllers;
 
-use Illuminate\Http\Request;
+use Summonshr\Requests\Contracts\UniversalRequestInterface;
 
 class UniversalController
 {
-    public function __invoke(Request $request)
+    public function __invoke(UniversalRequestInterface $request)
     {
         return $request->process();
     }

@@ -11,7 +11,9 @@ use SplFileInfo;
 use Symfony\Component\Finder\Finder;
 use Illuminate\Support\Str;
 use ReflectionClass;
+use Summonshr\Requests\Contracts\UniversalRequestInterface;
 use Summonshr\Requests\Controllers\UniversalController;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class RequestsServiceProvider extends ServiceProvider
 {
@@ -54,13 +56,37 @@ class RequestsServiceProvider extends ServiceProvider
 
         $class = new ReflectionClass($className);
 
-        if (!$class->hasConstant('REQUEST_METHOD') || !$class->hasConstant('ACTION')) {
+        if (!$class->implementsInterface(UniversalRequestInterface::class)) {
+            // Won't register if it does not implement this interface
             return;
         }
 
-        abort_unless($class->hasMethod('process'), 500, 'Missing process method');
+        $action = str($class->getShortName())->kebab();
+        $method = str($class->getShortName())->kebab()->explode('-')->first();
 
-        data_set($this->requests, $class->getConstant('REQUEST_METHOD') . '.' . $class->getConstant('ACTION'), $className);
+        $method = match ($method) {
+            'store' => 'POST',
+            'create' => 'POST',
+            'edit' => 'PUT',
+            default => $method
+        };
+
+
+        if ($class->getConstant('REQUEST_METHOD')) {
+            $method = $class->getConstant('REQUEST_METHOD');
+        }
+
+        $method = strtoupper($method);
+
+        if (!in_array($method, ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'])) {
+            throw new \Exception('Invalid request method');
+        }
+
+        if ($class->getConstant('ACTION')) {
+            $action = $class->getConstant('ACTION');
+        }
+
+        data_set($this->requests, $method . '.' . $action, $className);
     }
 
     /**
@@ -68,8 +94,14 @@ class RequestsServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        $this->app->bind(Request::class, function (Application $app) {
+        $this->app->bind(UniversalRequestInterface::class, function (Application $app) {
+
             $request = data_get($this->requests, request()->method() . '.' . request('action'));
+
+            if ($request === null) {
+                throw new NotFoundHttpException();
+            }
+
             return app($request);
         });
 

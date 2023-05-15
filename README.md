@@ -3,7 +3,7 @@
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/summonshr/requests.svg?style=flat-square)](https://packagist.org/packages/summonshr/requests)
 [![Total Downloads](https://img.shields.io/packagist/dt/summonshr/requests.svg?style=flat-square)](https://packagist.org/packages/summonshr/requests)
 
-Laravel application tends to have too much controllers which does not do much.
+Laravel application tends to have too much controllers which does not do much. Even from documentation, some request is process by custom laravel requests, then some process happens in controller and returns response. If you see the pattern, we really do not require any controller at all.
 
 ## Installation
 
