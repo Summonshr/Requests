@@ -15,12 +15,14 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class RequestsServiceProvider extends ServiceProvider
 {
-
     public $requests = [];
+
+    public $rootNamespace = 'App\\Http\\Requests\\';
 
     protected function registerRoutes(): void
     {
         $directories = Arr::wrap(app_path() . '/Http/Requests');
+
         $files = (new Finder())->files()->name('*.php')->in($directories)->sortByName();
 
         collect($files)->each(fn (SplFileInfo $file) => $this->registerFile($file));
@@ -53,7 +55,6 @@ class RequestsServiceProvider extends ServiceProvider
         }
 
         $class = new ReflectionClass($className);
-
         if (!$class->implementsInterface(UniversalRequestInterface::class)) {
             // Won't register if it does not implement this interface
             return;
@@ -62,6 +63,7 @@ class RequestsServiceProvider extends ServiceProvider
         $action = str($class->getShortName())->kebab();
         $method = str($class->getShortName())->kebab()->explode('-')->first();
         $method = config('requests.default_method')($method);
+        $action = str(str(str_replace($this->rootNamespace, '', $class->getNamespaceName()))->explode('\\')->join(''))->kebab() . '-' . $action;
 
         if ($class->getConstant('REQUEST_METHOD')) {
             $method = $class->getConstant('REQUEST_METHOD');
@@ -76,6 +78,7 @@ class RequestsServiceProvider extends ServiceProvider
         if ($class->getConstant('ACTION')) {
             $action = $class->getConstant('ACTION');
         }
+
 
         data_set($this->requests, $method . '.' . $action, $className);
     }

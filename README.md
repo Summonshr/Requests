@@ -93,6 +93,8 @@ Action is resolved as kebab case of the request class names if not specified in 
 
 For example, CreateUserRequest would have action 'create-user-request' as action by default.
 
+If you have nested folder inside Requests such as User/Create.php, then action would be 'user-create' and so on.
+
 A default handler has been registered like  this which can be changed through config files.
 ```php
  Route::any('/resource', function (UniversalRequestInterface $request) {
