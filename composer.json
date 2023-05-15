@@ -1,0 +1,51 @@
+{
+    "name": "summonshr/requests",
+    "description": "Use laravel requests only",
+    "keywords": [
+        "laravel",
+        "requests"
+    ],
+    "homepage": "https://github.com/summonshr/requests",
+    "license": "MIT",
+    "type": "library",
+    "authors": [
+        {
+            "name": "Suman Shrestha",
+            "email": "summonshr@gmail.com",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": "^8.2",
+        "illuminate/support": "^8.0"
+    },
+    "require-dev": {
+        "orchestra/testbench": "^6.0",
+        "phpunit/phpunit": "^9.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Summonshr\\Requests\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Summonshr\\Requests\\Tests\\": "tests"
+        }
+    },
+    "scripts": {
+        "test": "vendor/bin/phpunit",
+        "test-coverage": "vendor/bin/phpunit --coverage-html coverage"
+
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Summonshr\\Requests\\RequestsServiceProvider"
+            ]
+        }
+    }
+}
