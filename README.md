@@ -93,6 +93,19 @@ Action is resolved as kebab case of the request class names if not specified in 
 
 For example, CreateUserRequest would have action 'create-user-request' as action by default.
 
+A default handler has been registered like  this which can be changed through config files.
+```php
+ Route::any('/resource', function (UniversalRequestInterface $request) {
+    return $request->process();
+});
+ ```
+
+Or simply register one route yourself with UniversalRequestInterface as the parameter. It will resolve automatically.
+
+When not to use:
+When you have your own philosophy about how a laravel application structure should be.
+
+
 I will be building around this a lot.
 
 The application will automatically call the Request specified as per in Requests directory.
