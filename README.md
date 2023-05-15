@@ -1,9 +1,17 @@
-# Very short description of the package
-
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/summonshr/requests.svg?style=flat-square)](https://packagist.org/packages/summonshr/requests)
 [![Total Downloads](https://img.shields.io/packagist/dt/summonshr/requests.svg?style=flat-square)](https://packagist.org/packages/summonshr/requests)
 
-Laravel application tends to have too much controllers which does not do much. Even from documentation, some request is process by custom laravel requests, then some process happens in controller and returns response. If you see the pattern, we really do not require any controller at all.
+# Why this package
+
+Laravel application tends to have too much controllers which does not do much. Same all five request, index, create, show, edit and destroy. For each controller, we would have five functions, five requests to validate those requests too. This seems redundant. For anything to add, I would have to add atleast one route, one controller and one request.
+
+Rather than that, we could simply have one route that would accept anything, which would call a file that would authorize, validate and process a request. 
+
+So, this package was invented.
+
+No more controllers(If you need one, let me know why). No more adding routes, just dive through requests.
+
+One route to rule them all.
 
 ## Installation
 
@@ -21,8 +29,9 @@ composer require summonshr/requests
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Summonshr\Requests\Contracts\UniversalRequestInterface;
 
-class CreateApplication extends FormRequest
+class CreateApplication extends FormRequest implements UniversalRequestInterface
 {
     // To call on specific method
     const REQUEST_METHOD = 'GET';
@@ -66,7 +75,21 @@ When making request, send a parameter 'action' in each request on universal rout
 }
 ```
 
-In case of GET Request, send it to query param 'action'.
+Package is smart enough to find out method and action on its own too.
+
+```
+    'store' => 'POST',
+    'create' => 'POST',
+    'edit' => 'PUT',
+    'destroy' => 'DELETE',
+    'show' => 'GET',
+```
+
+Any request class starting with store, create, edit, destroy, show will automatically have POST, POST, PUT, DELETE, SHOW  by default. You can change those by publishing config files too.
+
+Action is resolved as kebab case of the request class names if not specified in ACTION constant.
+
+For example, CreateUserRequest would have action 'create-user-request' as action by default.
 
 The application will automatically call the Request specified as per in Requests directory.
 ### Testing
