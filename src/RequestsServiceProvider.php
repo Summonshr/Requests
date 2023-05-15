@@ -3,7 +3,6 @@
 namespace Summonshr\Requests;
 
 use Illuminate\Foundation\Application;
-use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
@@ -12,7 +11,6 @@ use Symfony\Component\Finder\Finder;
 use Illuminate\Support\Str;
 use ReflectionClass;
 use Summonshr\Requests\Contracts\UniversalRequestInterface;
-use Summonshr\Requests\Controllers\UniversalController;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class RequestsServiceProvider extends ServiceProvider
