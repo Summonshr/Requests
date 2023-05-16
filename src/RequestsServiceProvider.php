@@ -55,6 +55,7 @@ class RequestsServiceProvider extends ServiceProvider
         }
 
         $class = new ReflectionClass($className);
+        
         if (!$class->implementsInterface(UniversalRequestInterface::class)) {
             // Won't register if it does not implement this interface
             return;
@@ -102,7 +103,7 @@ class RequestsServiceProvider extends ServiceProvider
         if (config('requests.route_name')) {
             Route::any('/' . config('requests.route_name'), function (UniversalRequestInterface $request) {
                 return $request->process();
-            });
+            })->name(config('requests.route_name'));
         }
 
         $this->registerRoutes();
